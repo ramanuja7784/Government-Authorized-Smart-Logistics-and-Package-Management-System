@@ -1,0 +1,2 @@
+# Government-Authorized-Smart-Logistics-and-Package-Management-System
+Built a Python Django and MySQL web app for logistics companies to register shipments, verify government approval, and track packages in real time. Added an automated check that flags risky or suspicious shipments before dispatch, role-based logins for Courier, Delivery Boy and Government Authority, and automated billing that reduces manual errors.
