@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-12 col-lg-10">
+    <div class="card shadow-lg border-0 mt-4 rounded-4 overflow-hidden mb-5">
+      <div class="card-header bg-gradient bg-primary text-white py-3">
+        <h4 class="mb-0 text-center fw-bold"><i class="fas fa-box-open me-2"></i> Create New Shipment</h4>
+      </div>
+      <div class="card-body p-4 p-md-5 bg-light">
+        <form method="post" id="shipmentForm" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="row">
+            <!-- Sender Information Column -->
+            <div class="col-md-6 mb-4">
+              <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-user-tag me-2"></i>Sender Details</h5>
+
+              <div class="mb-3">
+                <label for="{{ form.sender_name.id_for_label }}" class="form-label text-muted fw-bold">Full Name</label>
+                {{ form.sender_name }}
+                {% if form.sender_name.errors %}
+                <div class="text-danger small mt-1">{{ form.sender_name.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="{{ form.sender_phone.id_for_label }}" class="form-label text-muted fw-bold">Phone</label>
+                  {{ form.sender_phone }}
+                  {% if form.sender_phone.errors %}
+                  <div class="text-danger small mt-1">{{ form.sender_phone.errors }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-6">
+                  <label for="{{ form.sender_email.id_for_label }}" class="form-label text-muted fw-bold">Email</label>
+                  {{ form.sender_email }}
+                  {% if form.sender_email.errors %}
+                  <div class="text-danger small mt-1">{{ form.sender_email.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="{{ form.sender_house_no.id_for_label }}" class="form-label text-muted fw-bold">House/Flat
+                  No.</label>
+                {{ form.sender_house_no }}
+                {% if form.sender_house_no.errors %}
+                <div class="text-danger small mt-1">{{ form.sender_house_no.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="mb-3">
+                <label for="{{ form.sender_street.id_for_label }}" class="form-label text-muted fw-bold">Street</label>
+                {{ form.sender_street }}
+                {% if form.sender_street.errors %}
+                <div class="text-danger small mt-1">{{ form.sender_street.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="{{ form.sender_city.id_for_label }}" class="form-label text-muted fw-bold">City</label>
+                  {{ form.sender_city }}
+                  {% if form.sender_city.errors %}
+                  <div class="text-danger small mt-1">{{ form.sender_city.errors }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-6">
+                  <label for="{{ form.sender_state.id_for_label }}" class="form-label text-muted fw-bold">State</label>
+                  {{ form.sender_state }}
+                  {% if form.sender_state.errors %}
+                  <div class="text-danger small mt-1">{{ form.sender_state.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="{{ form.sender_pincode.id_for_label }}"
+                    class="form-label text-muted fw-bold">Pincode</label>
+                  {{ form.sender_pincode }}
+                  {% if form.sender_pincode.errors %}
+                  <div class="text-danger small mt-1">{{ form.sender_pincode.errors }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-6">
+                  <label for="{{ form.sender_landmark.id_for_label }}"
+                    class="form-label text-muted fw-bold">Landmark</label>
+                  {{ form.sender_landmark }}
+                  {% if form.sender_landmark.errors %}
+                  <div class="text-danger small mt-1">{{ form.sender_landmark.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Receiver Information Column -->
+            <div class="col-md-6 mb-4">
+              <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-map-marker-alt me-2"></i>Receiver
+                Details</h5>
+
+              <div class="mb-3">
+                <label for="{{ form.receiver_name.id_for_label }}" class="form-label text-muted fw-bold">Full
+                  Name</label>
+                {{ form.receiver_name }}
+                {% if form.receiver_name.errors %}
+                <div class="text-danger small mt-1">{{ form.receiver_name.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="{{ form.receiver_phone.id_for_label }}"
+                    class="form-label text-muted fw-bold">Phone</label>
+                  {{ form.receiver_phone }}
+                  {% if form.receiver_phone.errors %}
+                  <div class="text-danger small mt-1">{{ form.receiver_phone.errors }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-6">
+                  <label for="{{ form.receiver_email.id_for_label }}"
+                    class="form-label text-muted fw-bold">Email</label>
+                  {{ form.receiver_email }}
+                  {% if form.receiver_email.errors %}
+                  <div class="text-danger small mt-1">{{ form.receiver_email.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="{{ form.receiver_house_no.id_for_label }}" class="form-label text-muted fw-bold">House/Flat
+                  No.</label>
+                {{ form.receiver_house_no }}
+                {% if form.receiver_house_no.errors %}
+                <div class="text-danger small mt-1">{{ form.receiver_house_no.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="mb-3">
+                <label for="{{ form.receiver_street.id_for_label }}"
+                  class="form-label text-muted fw-bold">Street</label>
+                {{ form.receiver_street }}
+                {% if form.receiver_street.errors %}
+                <div class="text-danger small mt-1">{{ form.receiver_street.errors }}</div>
+                {% endif %}
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="{{ form.receiver_city.id_for_label }}" class="form-label text-muted fw-bold">City</label>
+                  {{ form.receiver_city }}
+                  {% if form.receiver_city.errors %}
+                  <div class="text-danger small mt-1">{{ form.receiver_city.errors }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-6">
+                  <label for="{{ form.receiver_state.id_for_label }}"
+                    class="form-label text-muted fw-bold">State</label>
+                  {{ form.receiver_state }}
+                  {% if form.receiver_state.errors %}
+                  <div class="text-danger small mt-1">{{ form.receiver_state.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="{{ form.receiver_pincode.id_for_label }}"
+                    class="form-label text-muted fw-bold">Pincode</label>
+                  {{ form.receiver_pincode }}
+                  {% if form.receiver_pincode.errors %}
+                  <div class="text-danger small mt-1">{{ form.receiver_pincode.errors }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-6">
+                  <label for="{{ form.receiver_landmark.id_for_label }}"
+                    class="form-label text-muted fw-bold">Landmark</label>
+                  {{ form.receiver_landmark }}
+                  {% if form.receiver_landmark.errors %}
+                  <div class="text-danger small mt-1">{{ form.receiver_landmark.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipment Details Section -->
+          <h5 class="text-primary border-bottom pb-2 mb-3 mt-2"><i class="fas fa-box me-2"></i>Shipment Package Details
+          </h5>
+          <div class="row mb-4 bg-white p-3 rounded shadow-sm border mx-0">
+            <div class="col-md-4">
+              <label for="{{ form.contents_description.id_for_label }}"
+                class="form-label text-muted fw-bold">Contents</label>
+              {{ form.contents_description }}
+              {% if form.contents_description.errors %}
+              <div class="text-danger small mt-1">{{ form.contents_description.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-4 mt-3 mt-md-0" id="weight-container" style="transition: all 0.3s ease;">
+              <label for="{{ form.weight_kg.id_for_label }}" class="form-label text-muted fw-bold">Weight (kg)</label>
+              {{ form.weight_kg }}
+              {% if form.weight_kg.errors %}
+              <div class="text-danger small mt-1">{{ form.weight_kg.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-4 mt-3 mt-md-0" id="declared-value-container" style="transition: all 0.3s ease;">
+              <label for="{{ form.declared_value.id_for_label }}" class="form-label text-muted fw-bold">Declared Value
+                (₹)</label>
+              {{ form.declared_value }}
+              {% if form.declared_value.errors %}
+              <div class="text-danger small mt-1">{{ form.declared_value.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-12 mt-3">
+              <label for="{{ form.package_photo.id_for_label }}" class="form-label text-muted fw-bold">Package Photo
+                (Optional)</label>
+              {{ form.package_photo }}
+              {% if form.package_photo.errors %}
+              <div class="text-danger small mt-1">{{ form.package_photo.errors }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow-sm py-3">
+              Create Shipment <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const contentsSelect = document.getElementById("{{ form.contents_description.id_for_label }}");
+    const weightContainer = document.getElementById("weight-container");
+    const weightInput = document.getElementById("{{ form.weight_kg.id_for_label }}");
+    const declaredValueContainer = document.getElementById("declared-value-container");
+    const declaredValueInput = document.getElementById("{{ form.declared_value.id_for_label }}");
+
+    function toggleFields() {
+      if (contentsSelect.value === "documents") {
+        weightContainer.style.opacity = "0";
+        declaredValueContainer.style.opacity = "0";
+        setTimeout(() => {
+          weightContainer.style.display = "none";
+          declaredValueContainer.style.display = "none";
+        }, 150);
+        weightInput.value = "0";
+        declaredValueInput.value = "0";
+      } else {
+        weightContainer.style.display = "block";
+        declaredValueContainer.style.display = "block";
+        setTimeout(() => {
+          weightContainer.style.opacity = "1";
+          declaredValueContainer.style.opacity = "1";
+        }, 10);
+        if (weightInput.value === "0" || weightInput.value === "0.0") {
+          weightInput.value = "";
+        }
+        if (declaredValueInput.value === "0" || declaredValueInput.value === "0.0") {
+          declaredValueInput.value = "";
+        }
+      }
+    }
+
+    if (contentsSelect) {
+      toggleFields();
+      contentsSelect.addEventListener("change", toggleFields);
+    }
+  });
+</script>
+
+<style>
+  .card-header.bg-gradient {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+  }
+
+  .form-control,
+  .form-select {
+    color: #212529 !important;
+    /* Force dark text color inside inputs */
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    color: #212529 !important;
+  }
+</style>
+{% endblock %}

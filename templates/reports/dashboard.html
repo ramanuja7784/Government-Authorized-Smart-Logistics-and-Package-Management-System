@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <h3>📊 {% if user.is_courier %}Courier{% else %}System{% endif %} Reports</h3>
+
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h5>{{ total_shipments }}</h5>
+          <p>Total Shipments</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-warning text-white">
+        <div class="card-body">
+          <h5>{{ pending_count }}</h5>
+          <p>Pending Approval</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5>{{ approved_count }}</h5>
+          <p>Approved</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h5>{{ delivered_count }}</h5>
+          <p>Delivered</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURIER ONLY -->
+    {% if user.is_courier %}
+    <div class="col-md-6 mt-3">
+      <div class="card bg-danger text-white">
+        <div class="card-body">
+          <h5>{{ high_risk_shipments }}</h5>
+          <p>High Risk 🚨</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mt-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5>₹{{ courier_revenue|floatformat:0 }}</h5>
+          <p>Your Total Revenue</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ADMIN / SUPERUSER ONLY -->
+    {% if user.is_staff or user.is_superuser %}
+    <div class="col-md-6 mt-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5>₹{{ total_revenue|floatformat:0 }}</h5>
+          <p>System Revenue</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if user.is_courier %}
+  <h5>Recent Shipments</h5>
+  <div class="table-wrapper">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Tracking</th>
+        <th>Status</th>
+        <th>Risk</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in shipments %}
+      <tr>
+        <td>{{ s.tracking_number }}</td>
+        <td>{{ s.get_status_display }}</td>
+        <td>
+          <span class="badge
+            {% if s.risk_score == 'HIGH' %}bg-danger
+            {% elif s.risk_score == 'MEDIUM' %}bg-warning
+            {% else %}bg-success{% endif %}">
+            {{ s.risk_score }}
+          </span>
+        </td>
+        <td>₹{{ s.declared_value }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Track Shipment</h3>
+<form method="get">
+  <div class="mb-3">
+    <label>Tracking Number</label>
+    <input class="form-control" type="text" name="tracking_number"
+           value="{{ request.GET.tracking_number }}">
+  </div>
+  <button class="btn btn-primary">Search</button>
+</form>
+
+{% if shipment %}
+  <hr>
+  <p><strong>Tracking:</strong> {{ shipment.tracking_number }}</p>
+  <p><strong>Status:</strong> {{ shipment.get_status_display }}</p>
+  <p><strong>Sender:</strong> {{ shipment.sender_name }}</p>
+  <p><strong>Receiver:</strong> {{ shipment.receiver_name }}</p>
+{% elif request.GET.tracking_number %}
+  <div class="alert alert-danger mt-3">No shipment found.</div>
+{% endif %}
+{% endblock %}

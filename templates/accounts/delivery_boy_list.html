@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>🚚 Delivery Boys</h3>
+
+<a class="btn btn-primary mb-3" href="{% url 'accounts:create_delivery_boy' %}">
+  + Add Delivery Boy
+</a>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Availability</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for data in delivery_boys_data %}
+    <tr>
+      <td>{{ data.boy.username }}</td>
+      <td>{{ data.boy.email }}</td>
+      <td>
+        {% if data.boy.is_active %}
+        <span class="badge bg-success">Active</span>
+        {% else %}
+        <span class="badge bg-secondary">Inactive</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if data.is_busy %}
+        <span class="badge bg-danger">Busy</span>
+        {% else %}
+        <span class="badge bg-success">Free</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

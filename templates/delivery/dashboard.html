@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>🚚 My Delivery Assignments</h3>
+
+<!-- Earnings Vault Banner -->
+<div class="card mb-4 border-0 shadow-sm" style="background: linear-gradient(135deg, #198754 0%, #115e3b 100%);">
+  <div class="card-body text-white py-3">
+    <div class="row align-items-center">
+      <div class="col-sm-7 mb-3 mb-sm-0">
+        <h5 class="mb-0 fw-bold"><i class="fas fa-wallet me-2"></i>My Earnings Vault</h5>
+        <p class="mb-0 small opacity-75">Commissions earned from successful deliveries</p>
+      </div>
+      <div class="col-sm-5 d-flex justify-content-between justify-content-sm-end align-items-center">
+        <!-- Completed Counter -->
+        <div class="text-start text-sm-end me-sm-5">
+          <span class="d-block small opacity-75 text-uppercase">Completed Jobs</span>
+          <h3 class="mb-0 fw-bold text-white">{{ completed_count }}</h3>
+        </div>
+        <!-- Balance -->
+        <div class="text-end border-start border-white border-opacity-25 ps-4">
+          <span class="d-block small opacity-75 text-uppercase">Vault Balance</span>
+          <h3 class="mb-0 fw-bold text-white">₹{{ request.user.vault_balance }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if assignments %}
+<div class="table-wrapper">
+<table class="table table-hover mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>Tracking</th>
+      <th>Sender (Pickup)</th>
+      <th>Receiver (Delivery)</th>
+      <th>Package Details</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in assignments %}
+    <tr>
+      <td><strong>{{ a.shipment.tracking_number }}</strong></td>
+      <td>
+        <strong>{{ a.shipment.sender_name }}</strong><br>
+        <small class="text-white-50">📞 {{ a.shipment.sender_phone }}</small><br>
+        <small class="text-white-50">{{ a.shipment.sender_house_no }}, {{ a.shipment.sender_street }}, {{ a.shipment.sender_city }}</small>
+      </td>
+      <td>
+        <strong>{{ a.shipment.receiver_name }}</strong><br>
+        <small class="text-white-50">📞 {{ a.shipment.receiver_phone }}</small><br>
+        <small class="text-white-50">{{ a.shipment.receiver_house_no }}, {{ a.shipment.receiver_street }}, {{ a.shipment.receiver_city }} - {{ a.shipment.receiver_pincode }}</small>
+      </td>
+      <td>
+        ⚖️ {{ a.shipment.weight_kg }} kg<br>
+        <small class="text-white-50">📦 {{ a.shipment.contents_description|truncatechars:50 }}</small>
+      </td>
+      <td>
+        <span class="badge 
+            {% if a.shipment.status == 'IN_TRANSIT' %}bg-primary
+            {% elif a.shipment.status == 'OUT_FOR_DELIVERY' %}bg-warning text-dark
+            {% elif a.shipment.status == 'DELIVERED' %}bg-success
+            {% else %}bg-secondary{% endif %}">
+          {{ a.shipment.get_status_display }}
+        </span>
+      </td>
+      <td>
+        <div class="d-flex gap-2">
+          <a class="btn btn-sm btn-info text-white" href="{% url 'shipments:detail' a.shipment.tracking_number %}">
+            View
+          </a>
+          <a class="btn btn-sm btn-warning" href="{% url 'delivery:update_status' a.shipment.tracking_number %}">
+            Update
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-muted mt-3">No active deliveries assigned.</p>
+{% endif %}
+
+<hr class="my-5 border-secondary border-opacity-25">
+
+<h3 class="mt-4 mb-3 text-white">📦 Available Shipments for Delivery</h3>
+{% if available_shipments %}
+<div class="table-wrapper">
+<table class="table table-hover mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>Tracking</th>
+      <th>Sender (Pickup)</th>
+      <th>Receiver (Delivery)</th>
+      <th>Package Details</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in available_shipments %}
+    <tr>
+      <td><strong>{{ s.tracking_number }}</strong></td>
+      <td>
+        <strong>{{ s.sender_name }}</strong><br>
+        <small class="text-white-50">📞 {{ s.sender_phone }}</small><br>
+        <small class="text-white-50">{{ s.sender_house_no }}, {{ s.sender_street }}, {{ s.sender_city }}</small>
+      </td>
+      <td>
+        <strong>{{ s.receiver_name }}</strong><br>
+        <small class="text-white-50">📞 {{ s.receiver_phone }}</small><br>
+        <small class="text-white-50">{{ s.receiver_house_no }}, {{ s.receiver_street }}, {{ s.receiver_city }} - {{ s.receiver_pincode }}</small>
+      </td>
+      <td>
+        ⚖️ {{ s.weight_kg }} kg<br>
+        <small class="text-white-50">📦 {{ s.contents_description|truncatechars:50 }}</small>
+      </td>
+      <td>
+        <form method="POST" action="{% url 'delivery:accept_delivery' s.tracking_number %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-success">
+            <i class="fas fa-check me-1"></i> Accept Job
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-muted mt-3">No new approved shipments available for delivery.</p>
+{% endif %}
+
+{% endblock %}

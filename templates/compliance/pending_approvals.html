@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+  <h3>Government Approvals</h3>
+
+  <!-- ALL PENDING SHIPMENTS -->
+  <h5>All Pending ({{ pending_shipments|length }})</h5>
+  {% for shipment in pending_shipments %}
+  <div class="card mb-2">
+    <div class="card-body">
+      <strong>{{ shipment.tracking_number }}</strong>
+      Risk: <span class="badge 
+          {% if shipment.risk_score == 'HIGH' %}bg-danger
+          {% elif shipment.risk_score == 'MEDIUM' %}bg-warning
+          {% else %}bg-success{% endif %}">
+        {{ shipment.risk_score }}
+      </span>
+      {% if shipment.package_photo %}
+      <a href="{{ shipment.package_photo.url }}" class="btn btn-sm btn-secondary" target="_blank"><i
+          class="fas fa-image"></i> Photo</a>
+      {% endif %}
+      <a href="{% url 'compliance:approve' shipment.tracking_number %}" class="btn btn-sm btn-success">Approve</a>
+      <a href="{% url 'compliance:reject' shipment.tracking_number %}" class="btn btn-sm btn-danger">Reject</a>
+    </div>
+  </div>
+  {% empty %}
+  <p>No pending shipments.</p>
+  {% endfor %}
+
+  {% if high_risk_pending %}
+  <hr>
+  <h5>🚨 High Risk Pending ({{ high_risk_pending|length }})</h5>
+  {% for shipment in high_risk_pending %}
+  <div class="card mb-2 border-danger">
+    <div class="card-body">
+      <strong>{{ shipment.tracking_number }}</strong>
+      Risk: <span class="badge bg-danger">{{ shipment.risk_score }}</span>
+      {% if shipment.risk_details %}
+      <br><small>{{ shipment.risk_details }}</small>
+      {% endif %}
+      {% if shipment.package_photo %}
+      <a href="{{ shipment.package_photo.url }}" class="btn btn-sm btn-secondary" target="_blank"><i
+          class="fas fa-image"></i> Photo</a>
+      {% endif %}
+      <a href="{% url 'compliance:approve' shipment.tracking_number %}" class="btn btn-sm btn-success">Approve</a>
+      <a href="{% url 'compliance:reject' shipment.tracking_number %}" class="btn btn-sm btn-danger">Reject</a>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <hr class="my-4 border-secondary border-opacity-25">
+
+  <h5 class="text-white">✅ My Approved Shipments ({{ my_approved|length }})</h5>
+  {% for check in my_approved %}
+  <div class="card mb-2 bg-dark text-white border-success">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ check.shipment.tracking_number }}</strong>
+        <span class="badge bg-success ms-2">APPROVED</span>
+        <br>
+        <small class="text-white-50">
+          Sender: {{ check.shipment.sender_name }} ({{ check.shipment.sender_city }}) ➡️ Receiver: {{ check.shipment.receiver_name }} ({{ check.shipment.receiver_city }})
+        </small>
+      </div>
+      <div>
+        <a href="{% url 'shipments:detail' check.shipment.tracking_number %}" class="btn btn-sm btn-info text-white">
+          <i class="fas fa-info-circle me-1"></i> Details
+        </a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">You have not approved any shipments yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

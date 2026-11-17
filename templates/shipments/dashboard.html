@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>My Shipments</h3>
+
+{% if user.is_courier %}
+<a class="btn btn-primary mb-3" href="{% url 'shipments:create' %}">New Shipment</a>
+{% endif %}
+
+<div class="table-wrapper">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Tracking</th>
+      <th>Status</th>
+      <th>Sender</th>
+      <th>Receiver</th>
+      <th>Risk</th> <!-- NEW AI COLUMN -->
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in shipments %}
+    <tr>
+      <td>{{ s.tracking_number }}</td>
+      <td>{{ s.get_status_display }}</td>
+      <td>
+        {{ s.sender_name }}<br>
+        <small class="text-white-50">{{ s.sender_city }}, {{ s.sender_state }}</small>
+      </td>
+      <td>
+        {{ s.receiver_name }}<br>
+        <small class="text-white-50">{{ s.receiver_city }}, {{ s.receiver_state }}</small>
+      </td>
+      <td>
+        <!-- AI RISK BADGE -->
+        <span class="badge 
+            {% if s.risk_score == 'HIGH' %}bg-danger
+            {% elif s.risk_score == 'MEDIUM' %}bg-warning
+            {% else %}bg-success{% endif %}">
+          {{ s.risk_score }}
+        </span>
+      </td>
+      <td>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <!-- View always -->
+          <a class="btn btn-sm btn-info" href="{% url 'shipments:detail' s.tracking_number %}">
+            View
+          </a>
+
+          {% if s.package_photo %}
+          <a class="btn btn-sm btn-secondary" href="{{ s.package_photo.url }}" target="_blank">
+            <i class="fas fa-image"></i> Photo
+          </a>
+          {% endif %}
+
+          {% if user.is_courier %}
+
+          <!-- Update ONLY when Approved OR In Transit -->
+          <!-- Update ONLY when In Transit -->
+          {% if s.status == "IN_TRANSIT" or s.status == "OUT_FOR_DELIVERY" %}
+          <a class="btn btn-sm btn-warning" href="{% url 'shipments:update_status' s.tracking_number %}">
+            Update
+          </a>
+          {% endif %}
+
+          <!-- Delete ONLY when Rejected -->
+          {% if s.status == "REJECTED" %}
+          <a class="btn btn-sm btn-danger" href="{% url 'shipments:delete' s.tracking_number %}"
+            onclick="return confirm('This shipment was rejected by Govt. Delete permanently?');">
+            Delete
+          </a>
+          {% endif %}
+
+          <!-- Invoice when In Transit or Delivered -->
+          {% if s.status == "IN_TRANSIT" or s.status == "OUT_FOR_DELIVERY" or s.status == "DELIVERED" %}
+          <a class="btn btn-sm btn-success" href="{% url 'billing:generate' s.tracking_number %}">
+            Invoice
+          </a>
+          {% endif %}
+
+          {% endif %}
+        </div>
+      </td>
+
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6">No shipments.</td>
+    </tr> <!-- Updated colspan -->
+    {% endfor %}
+  </tbody>
+  </table>
+</div>
+{% endblock %}

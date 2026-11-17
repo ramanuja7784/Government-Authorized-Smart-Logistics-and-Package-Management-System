@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - GasLMP</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.8)),
+      url('{% static "images/office_bg.png" %}') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 450px;
+      padding: 15px;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      color: white;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .glass-card h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 28px;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 10px;
+      padding: 12px 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .form-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .btn-login {
+      background: linear-gradient(to right, #f6d365 0%, #fda085 100%);
+      border: none;
+      color: #333;
+      font-weight: 700;
+      padding: 12px;
+      border-radius: 10px;
+      width: 100%;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(253, 160, 133, 0.4);
+      color: #111;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+      display: block;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .register-link:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    .bell-icon-container {
+      position: absolute;
+      top: 25px;
+      right: 35px;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .bell-icon-container:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NOTIFICATION BELL (Top Right Corner) -->
+  <div class="bell-icon-container">
+    <a href="#" class="text-white text-decoration-none" title="Notifications" onclick="alert('Please log in securely to view your private notifications.');">
+      <div class="position-relative" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); padding: 12px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+        <i class="fas fa-bell fs-4"></i>
+        {% if unread_notifications_count > 0 %}
+        <!-- Decorative Red Dot Indicator (Visible only if authenticated user has messages) -->
+        <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">New alerts</span>
+        </span>
+        {% endif %}
+      </div>
+    </a>
+  </div>
+
+  <div class="login-container">
+    <div class="glass-card">
+      <h2>Welcome Back</h2>
+
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-danger shadow-sm rounded-3"
+        style="background: rgba(220, 53, 69, 0.8); border: none; color: white;">
+        {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label class="form-label">Username</label>
+          <input class="form-control" type="text" name="username" placeholder="Enter your username" required>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Password</label>
+          <input class="form-control" type="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <button class="btn btn-login" type="submit">Login</button>
+        <a href="{% url 'accounts:register' %}" class="register-link">Don't have an account? Register here</a>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>➕ Create Delivery Boy</h3>
+
+<form method="post" class="w-50">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button class="btn btn-success">Create</button>
+  <a href="{% url 'accounts:delivery_boy_list' %}" class="btn btn-secondary">
+    Cancel
+  </a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,305 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Ultra-Modern Vibrant Palette */
+  --primary-color: #6366f1;
+  /* Indigo 500 */
+  --primary-glow: rgba(99, 102, 241, 0.6);
+  --secondary-color: #d946ef;
+  /* Fuchsia 500 */
+  --secondary-glow: rgba(217, 70, 239, 0.6);
+  --accent-color: #06b6d4;
+  /* Cyan 500 */
+
+  --bg-gradient-start: #0f172a;
+  /* Slate 900 */
+  --bg-gradient-end: #1e1b4b;
+  /* Indigo 950 */
+
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+
+  --text-main: #f8fafc;
+  /* Slate 50 */
+  --text-secondary: #cbd5e1;
+  /* Slate 300 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+/* Base Reset & Typography */
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-gradient-start);
+  background-image:
+    linear-gradient(rgba(10, 15, 30, 0.85), rgba(15, 10, 40, 0.9)),
+    url('../images/office_bg.png');
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: white;
+}
+
+/* Glassmorphism Classes */
+.navbar,
+.card,
+.glass-panel {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Navbar Ultra Styling */
+.navbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+}
+
+.navbar-brand {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.75rem;
+  background: linear-gradient(to right, #818cf8, #e879f9, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(129, 140, 248, 0.3);
+}
+
+.nav-link {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Cards Re-imagined */
+.card {
+  border-radius: var(--radius-xl);
+  color: var(--text-main);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.card-header {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--glass-border);
+  font-weight: 700;
+  color: white;
+  padding: 1.5rem;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+/* Neon Buttons */
+.btn {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  color: white;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+.btn-outline-primary {
+  background: transparent;
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  color: #a5b4fc;
+}
+
+.btn-outline-primary:hover {
+  border-color: #818cf8;
+  color: white;
+  background: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Inputs & Forms */
+.form-control {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 0.875rem 1rem;
+}
+
+.form-control:focus {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  color: white;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+/* Ensure form labels are visible */
+.form-label,
+label {
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Tables Ultra Premium */
+.table-wrapper {
+  background: rgba(15, 23, 42, 0.85) !important; /* Block out background photo */
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.table-wrapper .text-muted {
+  color: #cbd5e1 !important; /* ensure muted text is legible against dark backgrounds */
+}
+
+.table {
+  color: #f8fafc;
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table> :not(caption)>*>* {
+  background-color: transparent !important;
+  color: #f8fafc !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.2rem 1rem;
+  vertical-align: middle;
+}
+
+.table thead th {
+  color: #818cf8 !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  border-bottom: 2px solid rgba(129, 140, 248, 0.3) !important;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Alerts */
+.alert {
+  background: rgba(16, 185, 129, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #d1fae5;
+  border-radius: var(--radius-lg);
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fee2e2;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered Animation Delay for multiple cards */
+.row>div:nth-child(1) .card {
+  animation-delay: 0.1s;
+}
+
+.row>div:nth-child(2) .card {
+  animation-delay: 0.2s;
+}
+
+.row>div:nth-child(3) .card {
+  animation-delay: 0.3s;
+}
+
+.row>div:nth-child(4) .card {
+  animation-delay: 0.4s;
+}
+
+/* Custom Container */
+.container.mt-4 {
+  max-width: 1200px;
+}
+
+/* Footer override */
+footer {
+  color: var(--text-muted);
+  border-top: 1px solid var(--glass-border);
+  margin-top: 3rem;
+  padding-top: 2rem;
+}

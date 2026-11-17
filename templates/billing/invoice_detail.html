@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container my-5">
+  {% if error %}
+    <div class="alert alert-danger shadow-sm">{{ error }}</div>
+    <a class="btn btn-secondary" href="{% url 'shipments:dashboard' %}">Back to Dashboard</a>
+  {% else %}
+    <div class="row justify-content-center">
+      <div class="col-md-9">
+        
+        <!-- Action Row (Hidden during printing) -->
+        <div class="d-flex justify-content-between align-items-center mb-4 d-print-none">
+          <a class="btn btn-outline-secondary" href="{% url 'shipments:dashboard' %}">
+            &larr; Back to Dashboard
+          </a>
+          <div>
+            <button class="btn btn-outline-dark me-2" onclick="window.print()">
+              🖨️ Print Invoice
+            </button>
+            <a class="btn btn-success" href="{% url 'billing:invoice_pdf' invoice.shipment.tracking_number %}">
+              ⬇ Download PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Corporate Invoice Card -->
+        <div class="card shadow-sm border-0 invoice-card">
+          <div class="card-body p-5">
+            
+            <!-- Logo & Brand Header -->
+            <div class="row align-items-center mb-5">
+              <div class="col-sm-7">
+                <div class="d-flex align-items-center">
+                  {% if invoice.shipment.package_photo %}
+                    <!-- Render Logo or Company Image -->
+                  {% endif %}
+                  <img src="{% static 'images/logo.png' %}" alt="Logo" class="me-3" style="height: 60px; max-width: 100%;">
+                  <div>
+                    <h4 class="mb-0 text-navy font-weight-bold">GA-SLMP LOGISTICS</h4>
+                    <small class="text-muted text-uppercase tracking-wider">Government Authorized Smart Logistics & Package Management</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-5 text-sm-end mt-3 mt-sm-0 d-flex flex-column align-items-sm-end justify-content-center">
+                <h3 class="text-uppercase text-muted font-weight-bold mb-3">TAX INVOICE</h3>
+                <div class="d-flex align-items-center justify-content-end mb-2">
+                  <div class="me-3 text-end">
+                    <p class="mb-0 text-muted small">Tracking ID: <strong class="text-dark">{{ invoice.shipment.tracking_number }}</strong></p>
+                    <p class="mb-0 text-muted small">Invoice Date: {{ invoice.generated_at|date:"d M Y, h:i A" }}</p>
+                    <p class="mb-0 text-muted small">Shipment Created: {{ invoice.shipment.created_at|date:"d M Y, h:i A" }}</p>
+                    {% if invoice.shipment.status == 'DELIVERED' %}
+                      <p class="mb-0 text-muted small">Delivered At: {{ invoice.shipment.updated_at|date:"d M Y, h:i A" }}</p>
+                    {% endif %}
+                  </div>
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=http://127.0.0.1:8000/shipments/track/?tracking_number={{ invoice.shipment.tracking_number }}" 
+                       alt="Verification QR" 
+                       class="img-fluid border p-1 rounded bg-white shadow-sm"
+                       style="width: 75px; height: 75px;">
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4 text-muted">
+
+            <!-- Addresses Grid (Sender / Receiver Details) -->
+            <div class="row mb-5">
+              <div class="col-sm-6 mb-4 mb-sm-0">
+                <span class="text-uppercase text-muted d-block mb-2 font-weight-bold tracking-wider">Sender Details</span>
+                <h5 class="text-dark font-weight-bold mb-1">{{ invoice.shipment.sender_name }}</h5>
+                <p class="text-secondary mb-1">
+                  {{ invoice.shipment.sender_house_no }}, {{ invoice.shipment.sender_street }}<br>
+                  {{ invoice.shipment.sender_city }}, {{ invoice.shipment.sender_state }} - {{ invoice.shipment.sender_pincode }}
+                </p>
+                <p class="text-secondary mb-0">Phone: {{ invoice.shipment.sender_phone }}</p>
+              </div>
+              
+              <div class="col-sm-6">
+                <span class="text-uppercase text-muted d-block mb-2 font-weight-bold tracking-wider">Receiver Details</span>
+                <h5 class="text-dark font-weight-bold mb-1">{{ invoice.shipment.receiver_name }}</h5>
+                <p class="text-secondary mb-1">
+                  {{ invoice.shipment.receiver_house_no }}, {{ invoice.shipment.receiver_street }}<br>
+                  {{ invoice.shipment.receiver_city }}, {{ invoice.shipment.receiver_state }} - {{ invoice.shipment.receiver_pincode }}
+                </p>
+                <p class="text-secondary mb-0">Phone: {{ invoice.shipment.receiver_phone }}</p>
+              </div>
+            </div>
+
+            <!-- Shipment Specifications Grid -->
+            <div class="row bg-light rounded p-4 mb-5 mx-0 shadow-sm border border-light">
+              <div class="col-sm-3 col-6 mb-3 mb-sm-0">
+                <span class="text-muted d-block small text-uppercase">Weight</span>
+                <strong class="text-dark">{{ invoice.shipment.weight_kg }} kg</strong>
+              </div>
+              <div class="col-sm-3 col-6 mb-3 mb-sm-0">
+                <span class="text-muted d-block small text-uppercase">Declared Value</span>
+                <strong class="text-dark">₹{{ invoice.shipment.declared_value }}</strong>
+              </div>
+              <div class="col-sm-3 col-6">
+                <span class="text-muted d-block small text-uppercase">Status</span>
+                <strong class="text-dark">{{ invoice.shipment.get_status_display }}</strong>
+              </div>
+              <div class="col-sm-3 col-6">
+                <span class="text-muted d-block small text-uppercase">Security Risk</span>
+                {% if invoice.shipment.risk_score == 'HIGH' %}
+                  <span class="badge bg-danger">HIGH RISK</span>
+                {% elif invoice.shipment.risk_score == 'MEDIUM' %}
+                  <span class="badge bg-warning text-dark">MEDIUM RISK</span>
+                {% else %}
+                  <span class="badge bg-success">LOW RISK</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Charges Breakdown Table -->
+            <h5 class="text-navy font-weight-bold mb-3 text-uppercase tracking-wider">Charges Breakdown</h5>
+            <div class="table-responsive">
+              <table class="table table-hover border-top border-bottom">
+                <thead class="table-light">
+                  <tr>
+                    <th>Description</th>
+                    <th class="text-end">Amount (INR)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Base Transport & Logistics Fee (Based on weight of {{ invoice.shipment.weight_kg }} kg)</td>
+                    <td class="text-end">₹{{ invoice.base_amount }}</td>
+                  </tr>
+                  <tr>
+                    <td>Integrated GST (IGST @ 18%)</td>
+                    <td class="text-end">₹{{ invoice.gst_amount }}</td>
+                  </tr>
+                  <tr class="table-light font-weight-bold border-double-bottom">
+                    <td><strong class="text-dark">Total Paid Amount</strong></td>
+                    <td class="text-end"><strong class="text-primary fs-5">₹{{ invoice.total_amount }}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Compliance Footer Notes -->
+            <div class="mt-5 bg-light rounded p-4 border-start border-primary border-3">
+              <h6 class="text-dark mb-2 font-weight-bold small text-uppercase">Terms & Regulatory Disclosures:</h6>
+              <ul class="mb-0 text-muted small ps-3">
+                <li>This is a computer-generated tax invoice generated by the GA-SLMP system, verifying that the package has undergone security screening.</li>
+                <li>The risk classification was determined by our automated Machine Learning Fraud Detection engine.</li>
+                <li>If the package is flagged as HIGH RISK, dispatch remains suspended until compliance verification is signed off by government officers.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Custom Page Styles & Print Formatting -->
+<style>
+  .text-navy {
+    color: #1a202c; /* Clean Charcoal Black */
+  }
+  .invoice-card {
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    border-top: 8px solid #ffffff; /* Clean White top accent */
+    overflow: hidden;
+  }
+  .border-double-bottom {
+    border-bottom: 3px double #1a202c !important;
+  }
+  .font-weight-bold {
+    font-weight: 700;
+  }
+  .tracking-wider {
+    letter-spacing: 0.05em;
+  }
+  .border-start {
+    border-left: 4px solid #1a202c !important;
+  }
+  .text-primary {
+    color: #1a202c !important;
+  }
+  
+  /* Print Stylesheet Overrides */
+  @media print {
+    body {
+      background: none !important;
+      color: #000 !important;
+      font-size: 12pt;
+    }
+    .container {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .invoice-card {
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .card-body {
+      padding: 0 !important;
+    }
+    /* Hide layout parts, navbars, and buttons during printing */
+    nav, footer, .d-print-none, .btn, .navbar, .sidebar, header {
+      display: none !important;
+    }
+    @page {
+      margin: 1.5cm;
+    }
+  }
+</style>
+
+{% endblock %}

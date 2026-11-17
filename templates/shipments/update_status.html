@@ -1,0 +1,29 @@
+      {% extends "base.html" %}
+      {% block content %}
+      <div class="container mt-4">
+        <h3>Update Status: {{ shipment.tracking_number }}</h3>
+        
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label>Current: {{ shipment.get_status_display }}</label>
+            <select name="status" class="form-select" required>
+            {% if shipment.status == "APPROVED" %}
+              <option value="IN_TRANSIT">In Transit</option>
+            {% endif %}
+
+            {% if shipment.status == "IN_TRANSIT" %}
+              <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
+            {% endif %}
+
+            {% if shipment.status == "OUT_FOR_DELIVERY" %}
+              <option value="DELIVERED">Delivered</option>
+            {% endif %}
+          </select>
+
+          </div>
+          <button type="submit" class="btn btn-primary">Update Status</button>
+          <a href="{% url 'shipments:dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+      {% endblock %}
